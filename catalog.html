@@ -26,6 +26,10 @@ db.collection("products").get().then((querySnapshot)=>{
 let container = document.getElementById("productsContainer");
 container.innerHTML = "";
 
+if(querySnapshot.empty){
+container.innerHTML = "<h2 style='text-align:center'>Товаров пока нет</h2>";
+}
+
 querySnapshot.forEach((doc)=>{
 let product = doc.data();
 container.innerHTML += `
