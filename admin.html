@@ -2,21 +2,104 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Админ панель</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 </head>
-<body style="text-align:center;padding:50px;">
 
-<h2>Админ панель</h2>
+<body>
 
-<p>Здесь можно управлять товарами.</p>
+<h2>Добавить товар</h2>
 
-<button>Добавить товар</button>
-<button>Удалить товар</button>
-<button>Изменить цену</button>
+<input type="text" id="productName" placeholder="Название товара"><br><br>
+<input type="number" id="productPrice" placeholder="Цена"><br><br>
 
-<br><br>
-<a href="index.html"><button>Назад</button></a>
+<button onclick="uploadImage()">Загрузить фото</button>
+<p id="imageStatus"></p>
+
+<button onclick="saveProduct()">Добавить товар</button>
+
+<hr>
+
+<h2>Все товары</h2>
+<div id="adminProducts"></div>
+
+<script>
+
+let uploadedImageUrl = "";
+
+function uploadImage(){
+const widget = cloudinary.createUploadWidget({
+cloudName: "dlrbsbr25",
+uploadPreset: "unsigned_preset"
+}, (error, result) => {
+if (!error && result && result.event === "success") {
+uploadedImageUrl = result.info.secure_url;
+document.getElementById("imageStatus").innerText = "Фото загружено ✅";
+}
+});
+
+widget.open();
+}
+
+function saveProduct(){
+let name = document.getElementById("productName").value;
+let price = document.getElementById("productPrice").value;
+
+if(!name || !price || !uploadedImageUrl){
+alert("Заполни всё и загрузи фото");
+return;
+}
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+products.push({
+name: name,
+price: price,
+image: uploadedImageUrl
+});
+
+localStorage.setItem("products", JSON.stringify(products));
+
+alert("Товар добавлен!");
+
+document.getElementById("productName").value = "";
+document.getElementById("productPrice").value = "";
+uploadedImageUrl = "";
+document.getElementById("imageStatus").innerText = "";
+
+loadAdminProducts();
+}
+
+function loadAdminProducts(){
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let container = document.getElementById("adminProducts");
+
+container.innerHTML = "";
+
+products.forEach((item, index)=>{
+container.innerHTML += `
+<div class="card">
+<img src="${item.image}" width="100">
+<h3>${item.name}</h3>
+<p>${item.price} ₸</p>
+<button onclick="deleteProduct(${index})">Удалить</button>
+</div>
+`;
+});
+}
+
+function deleteProduct(index){
+let products = JSON.parse(localStorage.getItem("products")) || [];
+products.splice(index,1);
+localStorage.setItem("products", JSON.stringify(products));
+loadAdminProducts();
+}
+
+loadAdminProducts();
+
+</script>
 
 </body>
 </html>
