@@ -1,0 +1,102 @@
+body{
+margin:0;
+font-family:Arial;
+background:#000;
+color:#D4AF37;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+border-bottom:1px solid #D4AF37;
+}
+
+.logo{
+height:55px;
+}
+
+.menu-btn{
+font-size:28px;
+cursor:pointer;
+}
+
+.side-menu{
+position:fixed;
+top:0;
+left:-250px;
+width:250px;
+height:100%;
+background:#111;
+transition:0.3s;
+padding-top:60px;
+border-right:1px solid #D4AF37;
+z-index:1000;
+}
+
+.side-menu a{
+display:block;
+padding:15px;
+color:#D4AF37;
+text-decoration:none;
+border-bottom:1px solid #222;
+}
+
+.side-menu.active{
+left:0;
+}
+
+.products{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+padding:30px;
+}
+
+.card{
+background:#111;
+padding:15px;
+border-radius:12px;
+width:250px;
+text-align:center;
+border:1px solid #222;
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+button{
+padding:8px 12px;
+margin:5px;
+border:1px solid #D4AF37;
+background:transparent;
+color:#D4AF37;
+cursor:pointer;
+border-radius:6px;
+}
+
+button:hover{
+background:#D4AF37;
+color:black;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+width:100%;
+background:#000;
+border-top:1px solid #D4AF37;
+display:flex;
+justify-content:space-around;
+padding:12px 0;
+}
+
+.bottom-nav a{
+color:#D4AF37;
+text-decoration:none;
+font-size:20px;
+}
