@@ -16,10 +16,7 @@
 <div class="side-menu" id="sideMenu">
 <a href="index.html">Главная</a>
 <a href="catalog.html">Каталог</a>
-<a href="contacts.html">Контакты</a>
 <a href="cart.html">Корзина</a>
-<a href="orders.html">Мои заказы</a>
-<a href="messages.html">Сообщения</a>
 <a href="#" onclick="adminLogin()">Вход администратора</a>
 </div>
 
@@ -28,36 +25,36 @@
 <div class="bottom-nav">
 <a href="index.html">🏠</a>
 <a href="cart.html">🛒</a>
-<a href="messages.html">💬</a>
 </div>
 
 <script src="script.js"></script>
 
 <script>
-fetch("products.json")
-.then(response => response.json())
-.then(data => {
-const container = document.getElementById("productsContainer");
+function loadProducts(){
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let container = document.getElementById("productsContainer");
+
 container.innerHTML = "";
 
-data.forEach(product => {
-const card = document.createElement("div");
-card.className = "card";
+if(products.length === 0){
+container.innerHTML = "<h2>Товаров пока нет</h2>";
+return;
+}
 
-card.innerHTML = `
+products.forEach(product=>{
+container.innerHTML += `
+<div class="card">
 <img src="${product.image}">
 <h3>${product.name}</h3>
 <p>${product.price} ₸</p>
 <button onclick="addToCart('${product.name}','${product.price}')">В корзину</button>
 <button onclick="buyNow('${product.name}')">Купить</button>
+</div>
 `;
+});
+}
 
-container.appendChild(card);
-});
-})
-.catch(error => {
-document.getElementById("productsContainer").innerHTML = "<h2>Ошибка загрузки товаров</h2>";
-});
+loadProducts();
 </script>
 
 </body>
