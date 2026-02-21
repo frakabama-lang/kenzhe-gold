@@ -8,5 +8,10 @@
     "name": "Золотая цепочка",
     "price": "250000",
     "image": "https://via.placeholder.com/250"
+  },
+  {
+    "name": "Браслет 585",
+    "price": "180000",
+    "image": "https://via.placeholder.com/250"
   }
 ]
