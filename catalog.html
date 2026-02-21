@@ -4,58 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Каталог</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+<script type="module">
 
-<header>
-<div class="menu-btn" onclick="toggleMenu()">⋮</div>
-<img src="logo.png" class="logo">
-</header>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<div class="side-menu" id="sideMenu">
-<a href="index.html">Главная</a>
-<a href="catalog.html">Каталог</a>
-<a href="cart.html">Корзина</a>
-<a href="#" onclick="adminLogin()">Вход администратора</a>
-</div>
+const firebaseConfig = {
+  apiKey: "AIzaSyACsqskmgUJVsw3Uy4g1ZgsN3hzub-hfFo",
+  authDomain: "kenzhe-gold-95af2.firebaseapp.com",
+  projectId: "kenzhe-gold-95af2",
+  storageBucket: "kenzhe-gold-95af2.firebasestorage.app",
+  messagingSenderId: "104513272791",
+  appId: "1:104513272791:web:ab1d154a46c7f9520e2992"
+};
 
-<section class="products" id="productsContainer"></section>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-<div class="bottom-nav">
-<a href="index.html">🏠</a>
-<a href="cart.html">🛒</a>
-</div>
-
-<script src="script.js"></script>
-
-<script>
-function loadProducts(){
-let products = JSON.parse(localStorage.getItem("products")) || [];
+async function loadProducts(){
+const querySnapshot = await getDocs(collection(db, "products"));
 let container = document.getElementById("productsContainer");
-
 container.innerHTML = "";
 
-if(products.length === 0){
-container.innerHTML = "<h2>Товаров пока нет</h2>";
-return;
-}
-
-products.forEach(product=>{
+querySnapshot.forEach((doc)=>{
+let product = doc.data();
 container.innerHTML += `
-<div class="card">
-<img src="${product.image}">
+<div style="border:1px solid gold;padding:15px;margin:15px;text-align:center;">
+<img src="${product.image}" width="200"><br>
 <h3>${product.name}</h3>
 <p>${product.price} ₸</p>
-<button onclick="addToCart('${product.name}','${product.price}')">В корзину</button>
-<button onclick="buyNow('${product.name}')">Купить</button>
+<button onclick="orderNow('${product.name}','${product.price}','${product.image}')">Купить</button>
 </div>
 `;
 });
 }
 
+window.orderNow = function(name,price,image){
+let message = `Здравствуйте! Хочу заказать:\n${name}\nЦена: ${price} ₸\nФото: ${image}`;
+let url = "https://wa.me/77759425888?text=" + encodeURIComponent(message);
+window.open(url, "_blank");
+}
+
 loadProducts();
+
 </script>
+</head>
+
+<body>
+
+<h1 style="text-align:center;">Каталог</h1>
+<div id="productsContainer"></div>
 
 </body>
 </html>
