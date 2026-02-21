@@ -38,6 +38,7 @@ fetch("products.json")
 .then(response => response.json())
 .then(data => {
 const container = document.getElementById("productsContainer");
+container.innerHTML = "";
 
 data.forEach(product => {
 const card = document.createElement("div");
@@ -48,13 +49,16 @@ card.innerHTML = `
 <h3>${product.name}</h3>
 <p>${product.price} ₸</p>
 <button onclick="addToCart('${product.name}','${product.price}')">В корзину</button>
-<button onclick="buyNow('${product.name}')">Купить</button>;
+<button onclick="buyNow('${product.name}')">Купить</button>
+`;
 
 container.appendChild(card);
 });
+})
+.catch(error => {
+document.getElementById("productsContainer").innerHTML = "<h2>Ошибка загрузки товаров</h2>";
 });
 </script>
 
 </body>
 </html>
-
