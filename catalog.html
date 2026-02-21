@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Каталог</title>
-<script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-const firebaseConfig = {
+<script>
+var firebaseConfig = {
   apiKey: "AIzaSyACsqskmgUJVsw3Uy4g1ZgsN3hzub-hfFo",
   authDomain: "kenzhe-gold-95af2.firebaseapp.com",
   projectId: "kenzhe-gold-95af2",
@@ -18,11 +18,11 @@ const firebaseConfig = {
   appId: "1:104513272791:web:ab1d154a46c7f9520e2992"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
 
-async function loadProducts(){
-const querySnapshot = await getDocs(collection(db, "products"));
+function loadProducts(){
+db.collection("products").get().then((querySnapshot)=>{
 let container = document.getElementById("productsContainer");
 container.innerHTML = "";
 
@@ -37,23 +37,22 @@ container.innerHTML += `
 </div>
 `;
 });
+});
 }
 
-window.orderNow = function(name,price,image){
+function orderNow(name,price,image){
 let message = `Здравствуйте! Хочу заказать:\n${name}\nЦена: ${price} ₸\nФото: ${image}`;
 let url = "https://wa.me/77759425888?text=" + encodeURIComponent(message);
 window.open(url, "_blank");
 }
 
-loadProducts();
-
+window.onload = loadProducts;
 </script>
+
 </head>
 
 <body>
-
 <h1 style="text-align:center;">Каталог</h1>
 <div id="productsContainer"></div>
-
 </body>
 </html>
