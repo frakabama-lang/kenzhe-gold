@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Корзина</title>
+<title>Корзина - Kenzhe Gold</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body onload="loadCart()">
 
 <header>
@@ -25,11 +26,47 @@
 
 <section class="products">
 <h2>Моя корзина</h2>
+
 <div id="cartContainer"></div>
 
 <h3>Итого: <span id="totalPrice">0 ₸</span></h3>
+
+<button onclick="checkout()">Оформить заказ</button>
+
 </section>
 
+<div class="bottom-nav">
+<a href="index.html">🏠</a>
+<a href="cart.html">🛒</a>
+<a href="messages.html">💬</a>
+</div>
+
 <script src="script.js"></script>
+
+<script>
+function checkout(){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+if(cart.length === 0){
+alert("Корзина пустая");
+return;
+}
+
+let message = "Здравствуйте! Хочу оформить заказ:\n\n";
+let total = 0;
+
+cart.forEach(item=>{
+message += "- " + item.name + " (" + item.price + " ₸)\n";
+total += Number(item.price);
+});
+
+message += "\nИтого: " + total + " ₸";
+
+window.open("https://wa.me/77759425888?text=" + encodeURIComponent(message));
+
+localStorage.removeItem("cart");
+}
+</script>
+
 </body>
 </html>
