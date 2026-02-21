@@ -47,8 +47,8 @@ card.innerHTML = `
 <img src="${product.image}">
 <h3>${product.name}</h3>
 <p>${product.price} ₸</p>
-<button onclick="buyNow('${product.name}')">Купить</button>
-`;
+<button onclick="addToCart('${product.name}','${product.price}')">В корзину</button>
+<button onclick="buyNow('${product.name}')">Купить</button>;
 
 container.appendChild(card);
 });
@@ -57,3 +57,4 @@ container.appendChild(card);
 
 </body>
 </html>
+
