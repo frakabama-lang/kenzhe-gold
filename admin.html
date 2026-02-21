@@ -4,32 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Админ панель</title>
-<link rel="stylesheet" href="style.css">
 <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-</head>
+<script type="module">
 
-<body>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<h2>Добавить товар</h2>
+const firebaseConfig = {
+  apiKey: "AIzaSyACsqskmgUJVsw3Uy4g1ZgsN3hzub-hfFo",
+  authDomain: "kenzhe-gold-95af2.firebaseapp.com",
+  projectId: "kenzhe-gold-95af2",
+  storageBucket: "kenzhe-gold-95af2.firebasestorage.app",
+  messagingSenderId: "104513272791",
+  appId: "1:104513272791:web:ab1d154a46c7f9520e2992"
+};
 
-<input type="text" id="productName" placeholder="Название товара"><br><br>
-<input type="number" id="productPrice" placeholder="Цена"><br><br>
-
-<button onclick="uploadImage()">Загрузить фото</button>
-<p id="imageStatus"></p>
-
-<button onclick="saveProduct()">Добавить товар</button>
-
-<hr>
-
-<h2>Все товары</h2>
-<div id="adminProducts"></div>
-
-<script>
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 let uploadedImageUrl = "";
 
-function uploadImage(){
+window.uploadImage = function(){
 const widget = cloudinary.createUploadWidget({
 cloudName: "dlrbsbr25",
 uploadPreset: "unsigned_preset"
@@ -39,11 +34,10 @@ uploadedImageUrl = result.info.secure_url;
 document.getElementById("imageStatus").innerText = "Фото загружено ✅";
 }
 });
-
 widget.open();
 }
 
-function saveProduct(){
+window.saveProduct = async function(){
 let name = document.getElementById("productName").value;
 let price = document.getElementById("productPrice").value;
 
@@ -52,54 +46,59 @@ alert("Заполни всё и загрузи фото");
 return;
 }
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
-
-products.push({
+await addDoc(collection(db, "products"), {
 name: name,
 price: price,
 image: uploadedImageUrl
 });
 
-localStorage.setItem("products", JSON.stringify(products));
-
 alert("Товар добавлен!");
-
-document.getElementById("productName").value = "";
-document.getElementById("productPrice").value = "";
-uploadedImageUrl = "";
-document.getElementById("imageStatus").innerText = "";
-
-loadAdminProducts();
+loadProducts();
 }
 
-function loadAdminProducts(){
-let products = JSON.parse(localStorage.getItem("products")) || [];
+async function loadProducts(){
+const querySnapshot = await getDocs(collection(db, "products"));
 let container = document.getElementById("adminProducts");
-
 container.innerHTML = "";
 
-products.forEach((item, index)=>{
+querySnapshot.forEach((docItem)=>{
+let data = docItem.data();
 container.innerHTML += `
-<div class="card">
-<img src="${item.image}" width="100">
-<h3>${item.name}</h3>
-<p>${item.price} ₸</p>
-<button onclick="deleteProduct(${index})">Удалить</button>
+<div style="border:1px solid gold;padding:10px;margin:10px;">
+<img src="${data.image}" width="100"><br>
+<b>${data.name}</b><br>
+${data.price} ₸<br>
+<button onclick="deleteProduct('${docItem.id}')">Удалить</button>
 </div>
 `;
 });
 }
 
-function deleteProduct(index){
-let products = JSON.parse(localStorage.getItem("products")) || [];
-products.splice(index,1);
-localStorage.setItem("products", JSON.stringify(products));
-loadAdminProducts();
+window.deleteProduct = async function(id){
+await deleteDoc(doc(db, "products", id));
+loadProducts();
 }
 
-loadAdminProducts();
+loadProducts();
 
 </script>
+</head>
+
+<body>
+
+<h2>Добавить товар</h2>
+
+<input type="text" id="productName" placeholder="Название"><br><br>
+<input type="number" id="productPrice" placeholder="Цена"><br><br>
+
+<button onclick="uploadImage()">Загрузить фото</button>
+<p id="imageStatus"></p>
+
+<button onclick="saveProduct()">Добавить товар</button>
+
+<hr>
+<h2>Все товары</h2>
+<div id="adminProducts"></div>
 
 </body>
 </html>
