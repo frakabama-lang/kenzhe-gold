@@ -2,17 +2,34 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Корзина</title>
-<style>
-body{background:#000;color:#D4AF37;font-family:Arial;text-align:center;padding:40px;}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="loadCart()">
 
-<h2>Корзина</h2>
-<p>Функция корзины будет подключена позже.</p>
+<header>
+<div class="menu-btn" onclick="toggleMenu()">⋮</div>
+<img src="logo.png" class="logo">
+</header>
 
-<a href="index.html">Вернуться на главную</a>
+<div class="side-menu" id="sideMenu">
+<a href="index.html">Главная</a>
+<a href="catalog.html">Каталог</a>
+<a href="contacts.html">Контакты</a>
+<a href="cart.html">Корзина</a>
+<a href="orders.html">Мои заказы</a>
+<a href="messages.html">Сообщения</a>
+<a href="#" onclick="adminLogin()">Вход администратора</a>
+</div>
 
+<section class="products">
+<h2>Моя корзина</h2>
+<div id="cartContainer"></div>
+
+<h3>Итого: <span id="totalPrice">0 ₸</span></h3>
+</section>
+
+<script src="script.js"></script>
 </body>
 </html>
