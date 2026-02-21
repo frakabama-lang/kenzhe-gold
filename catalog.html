@@ -23,23 +23,7 @@
 <a href="#" onclick="adminLogin()">Вход администратора</a>
 </div>
 
-<section class="products">
-
-<div class="card">
-<img src="https://via.placeholder.com/250x250">
-<h3>Золотое кольцо</h3>
-<p>120 000 ₸</p>
-<button onclick="buyNow('Золотое кольцо')">Купить</button>
-</div>
-
-<div class="card">
-<img src="https://via.placeholder.com/250x250">
-<h3>Золотая цепочка</h3>
-<p>250 000 ₸</p>
-<button onclick="buyNow('Золотая цепочка')">Купить</button>
-</div>
-
-</section>
+<section class="products" id="productsContainer"></section>
 
 <div class="bottom-nav">
 <a href="index.html">🏠</a>
@@ -48,5 +32,28 @@
 </div>
 
 <script src="script.js"></script>
+
+<script>
+fetch("products.json")
+.then(response => response.json())
+.then(data => {
+const container = document.getElementById("productsContainer");
+
+data.forEach(product => {
+const card = document.createElement("div");
+card.className = "card";
+
+card.innerHTML = `
+<img src="${product.image}">
+<h3>${product.name}</h3>
+<p>${product.price} ₸</p>
+<button onclick="buyNow('${product.name}')">Купить</button>
+`;
+
+container.appendChild(card);
+});
+});
+</script>
+
 </body>
 </html>
